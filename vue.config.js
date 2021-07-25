@@ -1,3 +1,5 @@
+const { preprocess } = require("./svelte.config");
+
 module.exports = {
     chainWebpack: (config) => {
         // if (process.env.STORYBOOK && process.env.STORYBOOK.trim() === "true") {
@@ -23,7 +25,10 @@ module.exports = {
             .test(/\.(html|svelte)$/)
             .use("svelte-loader")
             .loader("svelte-loader")
-            .end()
+            .options({
+                preprocess,
+            })
+            .end();
         return config;
     },
     css: {
