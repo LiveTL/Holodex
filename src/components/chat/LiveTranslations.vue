@@ -39,35 +39,38 @@
                 }"
             >
                 <transition-group name="fade">
-                    <template v-for="(item, index) in tlHistory">
-                        <div :key="item.key" :id="item.key" :ref="item.breakpoint && 'messageBreakpoint'">
-                            <div
-                                v-if="
-                                    index === 0 ||
-                                    index === tlHistory.length - 1 ||
-                                    item.name !== tlHistory[index - 1].name ||
-                                    item.breakpoint
-                                "
-                                class="tl-caption"
-                                :class="{
-                                    'primary--text': item.is_owner,
-                                    'secondary--text': item.is_verified || item.is_moderator || item.is_vtuber,
-                                }"
-                            >
-                                <v-divider class="my-1" />
-                                <span style="cursor: pointer" @click="selectedChannel = item.name">
-                                    <v-icon x-small>{{ icons.mdiCog }}</v-icon>
-                                    {{ `${item.prefix} ${item.name}` }}:
-                                </span>
+                    <!--
+                        <template v-for="(item, index) in tlHistory">
+                            <div :key="item.key" :id="item.key" :ref="item.breakpoint && 'messageBreakpoint'">
+                                <div
+                                    v-if="
+                                        index === 0 ||
+                                        index === tlHistory.length - 1 ||
+                                        item.name !== tlHistory[index - 1].name ||
+                                        item.breakpoint
+                                    "
+                                    class="tl-caption"
+                                    :class="{
+                                        'primary--text': item.is_owner,
+                                        'secondary--text': item.is_verified || item.is_moderator || item.is_vtuber,
+                                    }"
+                                >
+                                    <v-divider class="my-1" />
+                                    <span style="cursor: pointer" @click="selectedChannel = item.name">
+                                        <v-icon x-small>{{ icons.mdiCog }}</v-icon>
+                                        {{ `${item.prefix} ${item.name}` }}:
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="tl-caption mr-1" v-if="item.timestamp">
+                                        {{ item.displayTime }}
+                                    </span>
+                                    <span class="text--primary" v-html="item.message"></span>
+                                </div>
                             </div>
-                            <div>
-                                <span class="tl-caption mr-1" v-if="item.timestamp">
-                                    {{ item.displayTime }}
-                                </span>
-                                <span class="text--primary" v-html="item.message"></span>
-                            </div>
-                        </div>
-                    </template>
+                        </template>
+                    -->
+                <Popout></Popout>
                 </transition-group>
                 <v-btn text color="primary" @click="loadMessages()" :disabled="completed" v-if="!historyLoading">
                     {{ completed ? "Start of Messages" : "Load More" }}
@@ -102,6 +105,10 @@ import { dayjs } from "@/utils/time";
 import VueSocketIOExt from "vue-socket.io-extended";
 import { Manager } from "socket.io-client";
 import Vue from "vue";
+
+import toVue from "svelte-adapter/vue";
+// @ts-ignore
+import Popout from "@livetl/ui-components/components/Popout.svelte";
 import WatchLiveTranslationsSetting from "./LiveTranslationsSetting.vue";
 import chatMixin from "./chatMixin";
 
@@ -121,6 +128,7 @@ export default {
     mixins: [chatMixin],
     components: {
         WatchLiveTranslationsSetting,
+        Popout: toVue(Popout),
     },
     data() {
         return {

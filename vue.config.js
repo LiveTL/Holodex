@@ -17,6 +17,13 @@ module.exports = {
         //         })
         //         .end();
         // }
+        
+        config.module
+            .rule("svelte")
+            .test(/\.(html|svelte)$/)
+            .use("svelte-loader")
+            .loader("svelte-loader")
+            .end()
         return config;
     },
     css: {
